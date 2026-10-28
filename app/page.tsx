@@ -15,6 +15,24 @@ export default function Home() {
  const [idea,setIdea]=useState("");
  const [message,setMessage]=useState("");
  useEffect(() => {
+   // Google Translate provides a language menu for the languages supported by Google Translate.
+   const win = window as Window & { googleTranslateElementInit?: () => void; google?: { translate?: { TranslateElement?: new (options: Record<string, unknown>, elementId: string) => unknown } } };
+   win.googleTranslateElementInit = () => {
+     const TranslateElement = win.google?.translate?.TranslateElement;
+     const mount = document.getElementById("google_translate_element");
+     if (TranslateElement && mount && !mount.hasChildNodes()) {
+       new TranslateElement({ pageLanguage: "en", autoDisplay: false, layout: 0 }, "google_translate_element");
+     }
+   };
+   if (win.google?.translate?.TranslateElement) {
+     win.googleTranslateElementInit();
+   } else if (!document.querySelector('script[data-google-translate="true"]')) {
+     const script = document.createElement("script");
+     script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+     script.async = true;
+     script.dataset.googleTranslate = "true";
+     document.head.appendChild(script);
+   }
    gsap.registerPlugin(ScrollTrigger);
    const ctx = gsap.context(() => {
      gsap.fromTo(".hero-copy > *", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, stagger: 0.09, ease: "power3.out" });
@@ -40,7 +58,7 @@ export default function Home() {
  }, []);
  function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault(); if(!idea.trim()){setMessage("Write a few words about your idea first.");return;} setMessage("Your idea is captured in this preview. The project-planning workspace is the next feature to build.");}
  return <main>
-  <nav className="nav wrap"><a className="brand" href="#"><span className="brand-icon"><Code2 size={20}/></span><span>code story <i>studio</i></span></a><div className="navlinks"><a href="#process">How it works</a><a href="#studio">The studio</a><a href="#start">Your idea</a></div><a className="navbutton" href="#start">Start a project <ArrowUpRight size={15}/></a></nav>
+  <nav className="nav wrap"><a className="brand" href="#"><span className="brand-icon"><Code2 size={20}/></span><span>code story <i>studio</i></span></a><div className="navlinks"><a href="#process">How it works</a><a href="#studio">The studio</a><a href="#start">Your idea</a></div><div className="language-switcher" aria-label="Choose page language"><span>Language</span><div id="google_translate_element" /></div><a className="navbutton" href="#start">Start a project <ArrowUpRight size={15}/></a></nav>
   <section className="hero wrap"><div className="hero-copy"><div className="eyebrow"><span/> A CREATIVE SPACE FOR WHAT'S NEXT</div><h1>Big ideas deserve<br/><em>a better beginning.</em></h1><p className="lead">From the first “what if?” to something real. Find clarity, shape the experience, and build your next big thing — one thoughtful step at a time.</p><div className="actions"><a className="primary" href="#start">Bring your idea <ArrowRight size={17}/></a><a className="secondary" href="#process">Explore the process <span>↘</span></a></div><div className="proof"><div className="bubbles"><span>C</span><span>S</span><span>+</span></div><span>For makers, learners, and curious minds<br/>ready to make something meaningful.</span></div></div>
   <div className="art" aria-label="Abstract project concept illustration"><StudioScene /><div className="orbit o1"></div><div className="orbit o2"></div><div className="floating top"><span className="dot"></span> Idea captured <Check size={14}/></div><div className="project-card"><div className="card-top"><span className="traffic"><i/><i/><i/></span><small>PROJECT / 001</small><span className="status"></span></div><div className="symbol"><Code2 size={39}/></div><h2>Something<br/><em>remarkable.</em></h2><div className="mini-lines"><i/><i/><i/></div><div className="card-foot"><span>IDEA → REALITY</span><Sparkles size={15}/></div></div><div className="floating bottom"><Zap size={15}/><span>Progress, made visible.</span></div><p className="art-caption">A little structure changes everything.</p></div><div className="hero-count">01 <span></span> START WITH AN IDEA</div></section>
   <div className="ticker"><div>THINK CLEARER <b>✳</b> DESIGN SMARTER <b>✳</b> BUILD BETTER <b>✳</b> SHIP WITH PURPOSE <b>✳</b> THINK CLEARER <b>✳</b> DESIGN SMARTER <b>✳</b></div></div>
