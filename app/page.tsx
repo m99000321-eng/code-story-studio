@@ -21,6 +21,20 @@ export default function Home() {
      gsap.fromTo(".step", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, stagger: 0.14, ease: "power2.out", scrollTrigger: { trigger: ".steps", start: "top 82%" } });
      gsap.fromTo(".feature > *", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.16, ease: "power2.out", scrollTrigger: { trigger: ".feature", start: "top 80%" } });
      gsap.fromTo(".start-card", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, ease: "power2.out", scrollTrigger: { trigger: ".start", start: "top 82%" } });
+     gsap.fromTo(".project-card", { y: 24, rotate: -10, scale: 0.92, opacity: 0 }, { y: 0, rotate: -5, scale: 1, opacity: 1, duration: 1.15, delay: 0.25, ease: "elastic.out(1, 0.65)" });
+     gsap.to(".floating.top", { y: -9, rotate: 2, duration: 2.1, repeat: -1, yoyo: true, ease: "sine.inOut" });
+     gsap.to(".floating.bottom", { y: 8, rotate: -2, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+     gsap.to(".orbit.o1", { rotation: 360, duration: 32, repeat: -1, ease: "none" });
+     gsap.to(".orbit.o2", { rotation: -360, duration: 42, repeat: -1, ease: "none" });
+     gsap.to(".ticker div", { xPercent: -25, duration: 28, repeat: -1, ease: "none" });
+     gsap.fromTo(".mock", { rotate: 5, y: 24 }, { rotate: 2, y: 0, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: ".mock", start: "top 85%" } });
+     gsap.utils.toArray<HTMLElement>(".step, .mock-cards > div").forEach((el) => {
+       const enter = () => gsap.to(el, { y: -6, duration: 0.25, ease: "power2.out" });
+       const leave = () => gsap.to(el, { y: 0, duration: 0.35, ease: "power2.out" });
+       el.addEventListener("pointerenter", enter);
+       el.addEventListener("pointerleave", leave);
+       ctx.add(() => { el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave); });
+     });
    });
    return () => ctx.revert();
  }, []);
