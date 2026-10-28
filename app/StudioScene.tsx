@@ -60,7 +60,7 @@ export default function StudioScene() {
     ringTwo.rotation.set(1.2, -0.6, 0.4);
     group.add(ringTwo);
 
-    const count = 260;
+    const count = window.matchMedia("(max-width: 680px)").matches ? 110 : 260;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const radius = 2.0 + Math.random() * 1.25;
@@ -86,6 +86,15 @@ export default function StudioScene() {
     lilacLight.position.set(-3, -1, 2);
     scene.add(lilacLight);
 
+    const pointer = { x: 0, y: 0 };
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = host.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5) * 2;
+      pointer.y = ((event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5) * 2;
+    };
+    host.addEventListener("pointermove", onPointerMove, { passive: true });
+    host.addEventListener("pointerleave", () => { pointer.x = 0; pointer.y = 0; }, { passive: true });
+
     const resize = () => {
       const width = Math.max(host.clientWidth, 1);
       const height = Math.max(host.clientHeight, 1);
@@ -106,6 +115,11 @@ export default function StudioScene() {
         ring.rotation.z += 0.0015;
         ringTwo.rotation.x += 0.0008;
         particles.rotation.y -= 0.00035;
+        group.rotation.y += pointer.x * 0.0008;
+        group.rotation.x += pointer.y * 0.00035;
+        camera.position.x += (pointer.x * 0.18 - camera.position.x) * 0.025;
+        camera.position.y += (-pointer.y * 0.12 - camera.position.y) * 0.025;
+        camera.lookAt(0, 0, 0);
       }
       renderer.render(scene, camera);
     };
@@ -114,6 +128,7 @@ export default function StudioScene() {
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      host.removeEventListener("pointermove", onPointerMove);
       coreGeometry.dispose();
       coreMaterial.dispose();
       wire.geometry.dispose();
