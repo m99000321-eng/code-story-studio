@@ -18,19 +18,25 @@ export default function Home() {
    // Google Translate provides a language menu for the languages supported by Google Translate.
    const win = window as Window & { googleTranslateElementInit?: () => void; google?: { translate?: { TranslateElement?: new (options: Record<string, unknown>, elementId: string) => unknown } } };
    win.googleTranslateElementInit = () => {
-     const TranslateElement = win.google?.translate?.TranslateElement;
-     const mount = document.getElementById("google_translate_element");
-     if (TranslateElement && mount && !mount.hasChildNodes()) {
-       new TranslateElement({ pageLanguage: "en", includedLanguages: "af,am,ar,az,bg,bn,ca,ceb,cs,da,de,el,en,es,et,fa,fi,fil,fr,ga,gl,gu,ha,he,hi,hr,hu,hy,id,is,it,ja,jw,ka,kk,km,kn,ko,lo,lt,lv,mi,mk,ml,mn,mr,ms,my,ne,nl,no,pa,pl,pt,ro,ru,si,sk,sl,sq,sr,su,sv,sw,ta,te,th,tr,uk,ur,uz,vi,yo,zh-CN,zh-TW,zu", autoDisplay: false, layout: 0 }, "google_translate_element");
+     try {
+       const TranslateElement = win.google?.translate?.TranslateElement;
+       const mount = document.getElementById("google_translate_element");
+       if (TranslateElement && mount && !mount.hasChildNodes()) {
+         new TranslateElement({ pageLanguage: "en", includedLanguages: "af,am,ar,az,bg,bn,ca,ceb,cs,da,de,el,en,es,et,fa,fi,fil,fr,ga,gl,gu,ha,he,hi,hr,hu,hy,id,is,it,ja,jw,ka,kk,km,kn,ko,lo,lt,lv,mi,mk,ml,mn,mr,ms,my,ne,nl,no,pa,pl,pt,ro,ru,si,sk,sl,sq,sr,su,sv,sw,ta,te,th,tr,uk,ur,uz,vi,yo,zh-CN,zh-TW,zu", autoDisplay: false, layout: 0 }, "google_translate_element");
+       }
+     } catch (error) {
+       console.warn("Language selector could not initialize.", error);
      }
    };
    if (win.google?.translate?.TranslateElement) {
      win.googleTranslateElementInit();
    } else if (!document.querySelector('script[data-google-translate="true"]')) {
      const script = document.createElement("script");
-     script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+     script.src = "https://translate.google.com/translate_a/element.js";
      script.async = true;
      script.dataset.googleTranslate = "true";
+     script.onload = () => win.googleTranslateElementInit?.();
+     script.onerror = () => console.warn("Google Translate is unavailable; the site will remain usable.");
      document.head.appendChild(script);
    }
    gsap.registerPlugin(ScrollTrigger);
