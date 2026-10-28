@@ -29,3 +29,18 @@
 @media (prefers-reduced-motion: reduce) {
   .symbol, .status, .eyebrow span { animation: none !important; }
 }
+
+
+/* Global language selector (Google Translate supports 100+ languages). */
+.language-switcher{display:flex;flex-direction:column;gap:4px;align-items:flex-start;min-width:104px;color:#716d7b;font-size:9px;font-weight:700}
+#google_translate_element{min-height:25px;max-width:150px;overflow:hidden}
+#google_translate_element .goog-te-gadget{font-family:'DM Sans',sans-serif!important;font-size:0!important;color:transparent!important;white-space:nowrap}
+#google_translate_element .goog-te-combo{max-width:145px;margin:0!important;padding:5px 7px;border:1px solid #ded9e5;border-radius:7px;background:#fff;color:#373142;font:11px 'DM Sans',sans-serif;outline-offset:2px}
+.goog-te-banner-frame.skiptranslate{display:none!important}
+body{top:0!important}
+body.translated-rtl{direction:rtl}
+body.translated-rtl .nav,body.translated-rtl .footer{direction:rtl}
+body.translated-rtl .hero-copy,body.translated-rtl .intro-grid,body.translated-rtl .section-head,body.translated-rtl .feature,body.translated-rtl .start-card{text-align:right}
+body.translated-rtl .eyebrow{flex-direction:row-reverse}
+@media(max-width:900px){.language-switcher{min-width:90px}.language-switcher>span{display:none}#google_translate_element .goog-te-combo{max-width:110px;font-size:10px}}
+@media(max-width:680px){.language-switcher{min-width:75px;align-items:center}#google_translate_element{max-width:95px}#google_translate_element .goog-te-combo{max-width:95px;padding:5px 4px;font-size:9px}.navbutton{margin-left:0}}
