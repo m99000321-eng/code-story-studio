@@ -21,7 +21,7 @@ export default function Home() {
      const TranslateElement = win.google?.translate?.TranslateElement;
      const mount = document.getElementById("google_translate_element");
      if (TranslateElement && mount && !mount.hasChildNodes()) {
-       new TranslateElement({ pageLanguage: "en", autoDisplay: false, layout: 0 }, "google_translate_element");
+       new TranslateElement({ pageLanguage: "en", includedLanguages: "af,am,ar,az,bg,bn,ca,ceb,cs,da,de,el,en,es,et,fa,fi,fil,fr,ga,gl,gu,ha,he,hi,hr,hu,hy,id,is,it,ja,jw,ka,kk,km,kn,ko,lo,lt,lv,mi,mk,ml,mn,mr,ms,my,ne,nl,no,pa,pl,pt,ro,ru,si,sk,sl,sq,sr,su,sv,sw,ta,te,th,tr,uk,ur,uz,vi,yo,zh-CN,zh-TW,zu", autoDisplay: false, layout: 0 }, "google_translate_element");
      }
    };
    if (win.google?.translate?.TranslateElement) {
